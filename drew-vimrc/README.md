@@ -6,6 +6,7 @@ The script will make a backup of your original .vimrc files that it might overwr
 
 Installation
 -----
-If you trust me, here's a one-line installation:
+If you trust me, run this shell script:
 
-    git clone git://github.com/mcsaucy/drew-vimrc.git ~/.drew-vimrc && ~/.drew-vimrc/setup_vimrc.sh
+    setup_vimrc.sh
+
