@@ -1,6 +1,32 @@
 " Fix shell
 set shell=/bin/bash
 
+"set virtualedit=onemore
+
+" Exit insert mode
+inoremap kj <Esc>
+" End and head of a line
+inoremap ;l <End>
+inoremap ;k <Home>
+
+" Text Navigation
+"  h -> Up
+"  j -> Down
+"  k -> Left
+"  l -> Right
+"  ; -> Home
+"  ' -> End
+noremap i k
+noremap h i
+noremap k j
+noremap j h
+noremap ; <Home>
+noremap ' <End>
+
+
+" Kill Trailing WhiteSpace
+nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
+
 " Not compatible with Vi
 set nocompatible
 
@@ -35,7 +61,7 @@ set backspace=indent,eol,start
 " Colors
 set t_Co=256
 let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
-colorscheme obsidian
+colorscheme elflord
 syntax on
 
 " Powerline
@@ -58,6 +84,8 @@ set expandtab
 let g:indentLine_char = '|'
 let g:indentLine_color_term = 239
 
+" Smart indenting
+set smartindent
 
 " Wrapping, side-scrolling
 set nowrap
@@ -76,7 +104,7 @@ noremap <Space> @q
 set timeoutlen=1000 ttimeoutlen=0
 
 " Highlight cursor line
-set cursorline
+" set cursorline
 
 " Disable spellchecking
 set nospell
