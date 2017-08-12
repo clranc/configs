@@ -6,8 +6,8 @@ set shell=/bin/bash
 " Exit insert mode
 inoremap kj <Esc>
 " End and head of a line
-inoremap ;l <End>
-inoremap ;k <Home>
+"inoremap ;l <End>
+"inoremap ;k <Home>
 
 " Text Navigation
 "  h -> Up
@@ -81,6 +81,7 @@ set shiftwidth=4
 set softtabstop=4
 set smarttab
 set expandtab
+set et
 let g:indentLine_char = '|'
 let g:indentLine_color_term = 239
 
