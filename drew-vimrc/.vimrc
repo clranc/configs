@@ -96,7 +96,7 @@ set hlsearch
 
 " When pressing return after typing a comment, don't automatically start a new
 " comment
-au FileType * setlocal formatoptions-=r
+"au FileType * setlocal formatoptions-=r
 
 " When a macro is created on q, let space replay that macro
 noremap <Space> @q
@@ -109,6 +109,19 @@ set timeoutlen=1000 ttimeoutlen=0
 
 " Disable spellchecking
 set nospell
+
+" Nerd Tree
+autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Start Deoplete
+call deoplete#enable()
+
+" javacomplete2
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " File type aliases
 au BufNewFile,BufRead *.ejs set filetype=jst

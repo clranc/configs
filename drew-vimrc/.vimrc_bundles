@@ -1,4 +1,4 @@
-" Bundles
+"" Bundles
 Bundle 'gmarik/vundle'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'godlygeek/csapprox'
@@ -18,3 +18,8 @@ Bundle 'ervandew/supertab'
 Bundle 'groenewege/vim-less'
 Bundle 'fatih/vim-go'
 
+" Completion
+Bundle 'Shougo/deoplete.nvim'
+Bundle 'roxma/nvim-yarp'
+Bundle 'roxma/vim-hug-neovim-rpc'
+Bundle 'artur-shaik/vim-javacomplete2'
