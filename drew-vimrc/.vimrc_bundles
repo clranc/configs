@@ -23,3 +23,8 @@ Bundle 'Shougo/deoplete.nvim'
 Bundle 'roxma/nvim-yarp'
 Bundle 'roxma/vim-hug-neovim-rpc'
 Bundle 'artur-shaik/vim-javacomplete2'
+
+" Git Stuff
+Bundle 'Spredzy/vim-gitgutter'
+Bundle 'tpope/vim-fugitive'
+Bundle 'Xuyuanp/nerdtree-git-plugin'
