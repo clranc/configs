@@ -10,21 +10,35 @@ Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
 Bundle 'Yggdroot/indentLine'
 Bundle 'octol/vim-cpp-enhanced-highlight'
 Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'ervandew/supertab'
 Bundle 'groenewege/vim-less'
 Bundle 'fatih/vim-go'
+Bundle 'Shougo/unite.vim'
+Bundle 'vim-airline/vim-airline'
 
 " Completion
 Bundle 'Shougo/deoplete.nvim'
 Bundle 'roxma/nvim-yarp'
 Bundle 'roxma/vim-hug-neovim-rpc'
+" Java Complete
 Bundle 'artur-shaik/vim-javacomplete2'
+" Haskell
+Bundle 'Shougo/vimproc'
+Bundle 'eagletmt/neco-ghc'
+Bundle 'eagletmt/ghcmod-vim'
 
 " Git Stuff
 Bundle 'Spredzy/vim-gitgutter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Xuyuanp/nerdtree-git-plugin'
+
+" C Stuff
+Bundle 'joe-skb7/cscope-maps'
+
+" multiple cursors cause vim doesn't already have it 
+" I expect better vim
+Bundle 'terryma/vim-multiple-cursors'
