@@ -7,8 +7,7 @@ set shell=/bin/bash
 inoremap kj <Esc>
 " End and head of a line
 "inoremap ;l <End>
-"inoremap ;k <Home>
-
+"inoremap ;k <Home> 
 " Text Navigation
 "  h -> Up
 "  j -> Down
@@ -16,13 +15,13 @@ inoremap kj <Esc>
 "  l -> Right
 "  ; -> Home
 "  ' -> End
-noremap i k
-noremap h i
-noremap k j
-noremap j h
+"noremap i k
+"noremap h i
+"noremap k j
+"noremap j h
+noremap , a
 noremap ; <Home>
 noremap ' <End>
-
 
 " Kill Trailing WhiteSpace
 nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
@@ -64,6 +63,8 @@ let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme elflord
 syntax on
 
+" Vim air-line
+let g:airline_powerline_fonts=1
 " Powerline
 set laststatus=2
 
@@ -111,11 +112,11 @@ set timeoutlen=1000 ttimeoutlen=0
 set nospell
 
 " Nerd Tree
-autocmd vimenter * NERDTree
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"autocmd vimenter * NERDTree
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "**",
     \ "Staged"    : "+",
@@ -130,10 +131,13 @@ let g:NERDTreeIndicatorMapCustom = {
     \ }
 
 " Start Deoplete
-call deoplete#enable()
+"call deoplete#enable()
 
 " javacomplete2
 autocmd FileType java setlocal omnifunc=javacomplete#Complete
+
+" haskell
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " File type aliases
 au BufNewFile,BufRead *.ejs set filetype=jst
