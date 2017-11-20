@@ -1,0 +1,24 @@
+#!/bin/bash
+function bk(){
+    if [ $# -lt 1 ]; then
+        echo 1>&2 "$0: not enough arguments"
+        exit 2
+    elif [ $# -gt 1 ]; then
+        echo 1>&2 "$0: too many arguments"
+        exit 2
+    elif [[ $1 =~ ^[0-9]+$ ]]; then
+        let COUNT=0
+        STRING="./"
+    
+        while [ $COUNT -lt $1 ]; do
+            STRING+="../"
+            let COUNT+=1
+        done
+    
+        cd $STRING
+        exit 0
+    fi
+    
+    echo 1>&2 "$0: not proper positve integer input"
+    exit 2
+}
