@@ -125,7 +125,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 -- Create a textclock widget
-mytextclock = awful.widget.textclock("%a %b %d %I:%M:%S %p", 1)
+mytextclock = awful.widget.textclock("%a %b %d, %Y %I:%M:%S %p", 1)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
