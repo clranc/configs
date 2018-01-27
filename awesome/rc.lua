@@ -56,7 +56,29 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
+
 modkey = "Mod4"
+
+function setModKey()
+    local file = io.popen('xinput', 'r')
+    local stdout = file:read('*all')
+    file:close()
+    local msg = "Regular keyboard\n\nModkey = Super"
+
+    if stdout == '' then
+        msg = "Missing xinput to see devices\n\nModkey = Super"
+    elseif stdout:match("CHESEN") == "CHESEN" then
+        msg = "IBM M13 detected\n\nModkey = Alt"
+        modkey = "Mod1"
+    end
+
+    naughty.notify({
+        text = msg,
+        timeout =7
+    })
+end
+
+setModKey()
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -308,7 +330,8 @@ globalkeys = gears.table.join(
               {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
-
+    awful.key({ modkey, "Shift"   }, "f", function () awful.layout.set(awful.layout.suit.floating)  end,
+              {description = "select floating", group = "layout"}),
     awful.key({ modkey, "Control" }, "n",
               function ()
                   local c = awful.client.restore()
@@ -335,8 +358,10 @@ globalkeys = gears.table.join(
               end,
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
+    awful.key({ modkey , "Shift"}, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
+    -- Dmenu
+    awful.key({ modkey }, "p", function() awful.util.spawn("dmenu_run") end),
     -- Lock
     awful.key({ modkey, "Control" }, "l", function ()
         awful.util.spawn("xscreensaver-command -lock") end),
@@ -346,9 +371,9 @@ globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioMute",        volume_widget.toggle),
     -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function ()
-        awful.util.spawn("xbacklight -dec 7") end),
+        awful.util.spawn("xbacklight -dec 2") end),
     awful.key({ }, "XF86MonBrightnessUp", function ()
-        awful.util.spawn("xbacklight -inc 7") end)
+        awful.util.spawn("xbacklight -inc 2") end)
 
 )
 
@@ -575,6 +600,36 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-os.execute("killall nm-applet; nm-applet &")
-os.execute("killall blueman-applet; blueman-applet &")
+
+
+-- Applets {{{
+
+function run_once(prg, arg_string) -- {{{
+    if (not prg) or prg == "" then do return nil end end
+    local cmd = prg
+    if arg_string and arg_string ~= "" then
+        cmd = cmd .. " " .. (arg_string or "")
+    end
+    -- Look for process, if it doesn't exist then spawn it
+    return awful.spawn({
+        "/bin/sh", "-c",
+        "pgrep -f -u $USER -x '" .. cmd .. "' || (" .. cmd .. ")"
+    })
+end
+
+-- If the programs don't exist, bash will just silently fails
+run_once("xscreensaver")
+run_once("nm-applet")
+run_once("blueman-applet")
+
+-- External Keyboard
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Middle Emulation Enabled' 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'Coordinate Transformation Matrix' 3 0 0 0 3 0 0 0 1")
+
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'libinput Scroll Method Enabled' 0 0 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'libinput Middle Emulation Enabled' 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'Coordinate Transformation Matrix' 5 0 0 0 5 0 0 0 1")
+
 -- }}}
+
