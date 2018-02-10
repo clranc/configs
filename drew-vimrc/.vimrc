@@ -7,7 +7,7 @@ set shell=/bin/bash
 inoremap kj <Esc>
 " End and head of a line
 "inoremap ;l <End>
-"inoremap ;k <Home> 
+"inoremap ;k <Home>
 " Text Navigation
 "  h -> Up
 "  j -> Down
@@ -64,6 +64,19 @@ set t_Co=256
 let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme elflord
 syntax on
+
+" python syntax
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"
+""" Display checker-name for that error-message
+"let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_python_checkers=['flake8','python3']
 
 " Vim air-line
 let g:airline_powerline_fonts=1

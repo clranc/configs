@@ -245,6 +245,7 @@ awful.screen.connect_for_each_screen(function(s)
             volume_widget,
             require("battery"),
             require("fish"),
+            require("remind"),
             mytextclock,
             s.mylayoutbox,
         },
