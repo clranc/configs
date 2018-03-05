@@ -31,7 +31,8 @@ function remind.findtodos ()
     if stdout == '' then
         naughty.notify({ preset = naughty.config.presets.critical,
                          text = 'Yo!! Why arent you doing stuff bra!?',
-                         timeout = 10})
+                         timeout = 10,
+                         position = "top_middle"})
     end
     return todos
 end
@@ -47,10 +48,11 @@ function remind.update()
     -- Add each battery's values to the running total
     for todo in todos do
         output = remind.catfile("~/todo/"..todo)
-        naughty.notify({ bg="#FFFFFF",
+        naughty.notify({ bg="#FDFF00",
                          fg="#DD4400",
                          text = output,
-                         timeout = 10})
+                         timeout = 10,
+                         position = "top_middle"})
         cnt = cnt + 1
     end
     remind.widget.widget.text = " tasks: "..tostring(cnt).." "

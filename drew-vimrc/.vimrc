@@ -5,6 +5,7 @@ set shell=/bin/bash
 
 " Exit insert mode
 inoremap kj <Esc>
+vnoremap kj <Esc> 
 " End and head of a line
 "inoremap ;l <End>
 "inoremap ;k <Home>
@@ -25,6 +26,9 @@ noremap ' <End>
 
 " Kill Trailing WhiteSpace
 nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
+
+" Euthenizes tabs
+nnoremap <F6> :let _save = winsaveview()<Bar>:%s/\t/    /g<Bar>:call winrestview(_save)<Bar><CR>
 
 " Not compatible with Vi
 set nocompatible
@@ -76,7 +80,7 @@ syntax on
 """ Display checker-name for that error-message
 "let g:syntastic_aggregate_errors = 1
 
-let g:syntastic_python_checkers=['flake8','python3']
+"let g:syntastic_python_checkers=['flake8','python3']
 
 " Vim air-line
 let g:airline_powerline_fonts=1
