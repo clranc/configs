@@ -16,7 +16,8 @@ local menubar = require("menubar")
 require("volume")
 require("battery")
 require("fish")
-blingbling = require("blingbling/")
+require("remind")
+--blingbling = require("blingbling/")
 vicious = require("vicious/widgets/")
 
 awful.util.spawn_with_shell("xcompmgr -cF &")
@@ -232,6 +233,7 @@ for s = 1, screen.count() do
     right_layout:add(volume_widget)
     right_layout:add(battery_widget)
     right_layout:add(fish.widget)
+    right_layout:add(remind.widget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
@@ -511,20 +513,28 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 awful.util.spawn_with_shell( lockstart )
 
-function run_once(prg, arg_string) -- {{{
-    if (not prg) or prg == "" then do return nil end end
-    local cmd = prg
-    if arg_string and arg_string ~= "" then
-        cmd = cmd .. " " .. (arg_string or "")
-    end
-    -- Look for process, if it doesn't exist then spawn it
-    return awful.spawn({
-        "/bin/sh", "-c",
-        "pgrep -f -u $USER -x '" .. cmd .. "' || (" .. cmd .. ")"
-    })
+--function run_once(prg, arg_string) -- {{{
+--    if (not prg) or prg == "" then do return nil end end
+--    local cmd = prg
+--    if arg_string and arg_string ~= "" then
+--        cmd = cmd .. " " .. (arg_string or "")
+--    end
+--    -- Look for process, if it doesn't exist then spawn it
+--    return awful.spawn({
+--        "/bin/sh", "-c",
+--        "pgrep -f -u $USER -x '" .. cmd .. "' || (" .. cmd .. ")"
+--    })
+--end
+
+function run_once(prg, arg_string, pname, screen)
+    if not prg then do return nil end end
+    if not pname then pname = prg end
+	local spn = function(cmd) awful.util.spawn_with_shell(cmd, screen) end
+	local arg = function(x) return x end
+	if arg_string then arg = function(x) return (x .. " " .. arg_string) end end
+
+	spn("sh -c 'pgrep -f -u $USER -x \\'" .. arg(pname) .. "\\' " .. "|| (" .. arg(prg) .. ")'")
 end
-
-
 
 run_once("nm-applet")
 --run_once("blueman-applet")
