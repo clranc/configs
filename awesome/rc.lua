@@ -45,7 +45,6 @@ end
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
-
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm"
 editor = os.getenv("EDITOR") or "nano"
@@ -621,7 +620,7 @@ end
 -- If the programs don't exist, bash will just silently fails
 run_once("xscreensaver")
 run_once("nm-applet")
-run_once("blueman-applet")
+run_once("blueberry-tray")
 
 -- External Keyboard
 awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
