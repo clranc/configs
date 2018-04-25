@@ -5,7 +5,7 @@ set shell=/bin/bash
 
 " Exit insert mode
 inoremap kj <Esc>
-vnoremap kj <Esc> 
+"vnoremap kj <Esc> 
 " End and head of a line
 "inoremap ;l <End>
 "inoremap ;k <Home>
@@ -24,11 +24,21 @@ noremap , a
 noremap ; <Home>
 noremap ' <End>
 
+" list
+nnoremap <F3> :set list<BAR><CR>
+
+" nolist
+nnoremap <F4> :set nolist<BAR><CR>
+
 " Kill Trailing WhiteSpace
 nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
 
 " Euthenizes tabs
-nnoremap <F6> :let _save = winsaveview()<Bar>:%s/\t/    /g<Bar>:call winrestview(_save)<Bar><CR>
+nnoremap <F6> :set expandtab<Bar>:retab<Bar><CR>
+
+" Un-Euthenize tabs
+nnoremap <F7> :set noexpandtab<Bar>:retab!<Bar><CR>
+
 
 " Not compatible with Vi
 set nocompatible
@@ -48,8 +58,7 @@ source ~/.vimrc_vundle
 " Bundles
 source ~/.vimrc_bundles
 
-" User files (optional)
-silent! source ~/.vimrc_user
+
 
 " Enable mouse
 set mouse=a
@@ -165,3 +174,7 @@ au BufNewFile,BufRead *.less set filetype=less
 au BufRead,BufNewFile *.go setfiletype go
 au BufNewFile,BufRead *.ino set filetype=c
 au BufNewFile,BufRead *.pde set filetype=c
+
+
+" Work directory files (optional)
+silent! source .vimrc_settings
