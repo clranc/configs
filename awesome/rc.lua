@@ -57,7 +57,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- However, you can use another modifier like Mod1, but it may interact with others.
 
 modkey = "Mod4"
-
+alt="Mod1"
 function setModKey()
     local file = io.popen('xinput', 'r')
     local stdout = file:read('*all')
@@ -68,7 +68,7 @@ function setModKey()
         msg = "Missing xinput to see devices\n\nModkey = Super"
     elseif stdout:match("CHESEN") == "CHESEN" then
         msg = "IBM M13 detected\n\nModkey = Alt"
-        modkey = "Mod1"
+        modkey = alt
     end
 
     naughty.notify({
@@ -244,7 +244,7 @@ awful.screen.connect_for_each_screen(function(s)
             volume_widget,
             require("battery"),
             require("fish"),
-            require("remind"),
+            --require("remind"),
             mytextclock,
             s.mylayoutbox,
         },
@@ -309,7 +309,7 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    awful.key({ alt, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
@@ -604,6 +604,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- Applets {{{
 
+
 function run_once(prg, arg_string) -- {{{
     if (not prg) or prg == "" then do return nil end end
     local cmd = prg
@@ -617,10 +618,28 @@ function run_once(prg, arg_string) -- {{{
     })
 end
 
+function run_once_py(prg, arg_string) -- {{{
+    if (not prg) or prg == "" then do return nil end end
+    local script = prg
+    local run = prg
+    if arg_string and arg_string ~= "" then
+        run = run .. " " .. (arg_string or "")
+    end
+    -- Look for process, if it doesn't exist then spawn it
+    return awful.spawn({
+        "/bin/sh", "-c",
+        "pgrep -f -u $USER 'python.*" .. script .. ".' || (" .. run .. ")"
+    })
+end
+
+
 -- If the programs don't exist, bash will just silently fails
 run_once("xscreensaver")
 run_once("nm-applet")
-run_once("blueberry-tray")
+run_once_py("blueberry-tray")
+run_once("telegram-desktop")
+
+
 
 -- External Keyboard
 awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
