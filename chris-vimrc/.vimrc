@@ -58,8 +58,6 @@ source ~/.vimrc_vundle
 " Bundles
 source ~/.vimrc_bundles
 
-
-
 " Enable mouse
 set mouse=a
 if !has('nvim')
@@ -176,5 +174,7 @@ au BufNewFile,BufRead *.ino set filetype=c
 au BufNewFile,BufRead *.pde set filetype=c
 
 
+let s:gitter = substitute(system('git rev-parse --show-toplevel'),'\n$', '', '')
+let s:source = join([s:gitter,'.vimrc_settings'],'/')
 " Work directory files (optional)
-silent! source .vimrc_settings
+execute 'silent! source '. s:source
