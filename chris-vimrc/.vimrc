@@ -178,3 +178,5 @@ let s:gitter = substitute(system('git rev-parse --show-toplevel'),'\n$', '', '')
 let s:source = join([s:gitter,'.vimrc_settings'],'/')
 " Work directory files (optional)
 execute 'silent! source '. s:source
+let s:cppconfig = join([s:gitter,'.syntastic_c_headers'],'/')
+silent! let g:syntastic_cpp_config_file = s:cppconfig

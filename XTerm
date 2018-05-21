@@ -1,0 +1,7 @@
+XTerm*eightBitInput:false
+XTerm*Background:Black
+XTerm*Foreground:White
+XTerm*saveLines:1000
+XTerm*HiForeColor: white
+XTerm*HiBackColor: #c06077
+XTerm*geometry: +50+100
