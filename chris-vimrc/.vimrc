@@ -16,9 +16,6 @@ inoremap kj <Esc>
 "
 noremap ) <End>
 
-" Kill Traiing WhiteSpace
-nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
-
 " list
 nnoremap <F1> :set list<BAR><CR>
 
@@ -31,6 +28,11 @@ nnoremap <F3> :set expandtab<Bar>:retab<Bar><CR>
 " Un-Euthenze tabs
 nnoremap <F4> :set noexpandtab<Bar>:retab!<Bar><CR>
 
+" Kill Traiing WhiteSpace
+nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
+
+" Toggle Synstastic
+nnoremap <F6> :SyntasticToggleMode<BAR><CR>
 
 " Not compatible with Vi
 set nocompatible
@@ -67,6 +69,9 @@ set t_Co=256
 let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme elflord
 syntax on
+
+" Syntastic Passive Mode
+"let b:syntastic_mode = "passive"
 
 " python syntax
 set statusline+=%#warningmsg#
@@ -132,13 +137,14 @@ set timeoutlen=1000 ttimeoutlen=0
 set nospell
 
 " Nerd Tree
-"autocmd vimenter * NERDTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"let g:NERDTreeIndicatorMapCustom = {
-"    \ "Modified"  : "**",
+autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "**" }
+
 "    \ "Staged"    : "+",
 "    \ "Untracked" : "*_",
 "    \ "Renamed"   : "->",

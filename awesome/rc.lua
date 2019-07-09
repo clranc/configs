@@ -244,7 +244,7 @@ awful.screen.connect_for_each_screen(function(s)
             volume_widget,
             require("battery"),
             require("fish"),
-            --require("remind"),
+            require("remind"),
             mytextclock,
             s.mylayoutbox,
         },
@@ -371,9 +371,9 @@ globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioMute",        volume_widget.toggle),
     -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function ()
-        awful.util.spawn("xbacklight -dec 2") end),
+        awful.util.spawn("xbacklight -dec 5") end),
     awful.key({ }, "XF86MonBrightnessUp", function ()
-        awful.util.spawn("xbacklight -inc 2") end)
+        awful.util.spawn("xbacklight -inc 5") end)
 
 )
 
@@ -640,15 +640,24 @@ run_once_py("blueberry-tray")
 run_once("telegram-desktop")
 
 
+--awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Scroll Method Enabled' 0 0 1")
+--awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Middle Emulation Enabled' 1")
+
 
 -- External Keyboard
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Middle Emulation Enabled' 1")
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'Coordinate Transformation Matrix' 3 0 0 0 3 0 0 0 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Middle Emulation Enabled' 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'Coordinate Transformation Matrix' 3 0 0 0 3 0 0 0 1")
 
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'libinput Scroll Method Enabled' 0 0 1")
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'libinput Middle Emulation Enabled' 1")
-awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter' 'Coordinate Transformation Matrix' 5 0 0 0 5 0 0 0 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Scroll Method Enabled' 0 0 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Middle Emulation Enabled' 1")
+--awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'Coordinate Transformation Matrix' 2 0 0 0 2 0 0 0 1")
+
+-- Dell XPS display
+awful.util.spawn_with_shell("xrandr --output eDP-1 --mode 1920x1080")
+
+-- Remove middle mouse click insert **For some reason xinput doesn't like using device names when using some functions but fortunately I can make it list the id and shove it in
+awful.util.spawn_with_shell("xinput set-button-map $(xinput --list --id-only 'pointer:Lenovo ThinkPad Compact USB Keyboard with TrackPoint') 1 0 3")
 
 -- }}}
 
