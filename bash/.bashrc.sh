@@ -96,9 +96,9 @@ GIT_PS1_SHOWCOLORHINTS=true
 
 if ${use_color} ; then
 	if [[ ${EUID} == 0 ]] ; then  #Check if root user
-    PS1+='\[\033[01;31m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
+	PS1+='\[\033[01;31m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
 	else
-    PS1+='\[\033[01;32m\]\u@\h\[\033[00m\]:$(__git_ps1 "%s")\[\033[00m\]: \[\033[01;34m\]\W \$\[\033[00m\] '
+	PS1+='\[\033[01;32m\]\u@\h\[\033[00m\]:$(__git_ps1 "%s")\[\033[00m\]: \[\033[01;34m\]\W \$\[\033[00m\] '
 	fi
 
 	alias less='less -R'
@@ -117,32 +117,46 @@ done
 
 color_str()
 {
-    echo -en "\033\[38;5;${1}m\]"
+	echo -en "\033\[38;5;${1}m\]"
+}
+
+prompt_pwd() {
+	case "$PWD" in
+		"$HOME")
+			echo "~"
+			;;
+		*)
+			printf "%s" $(echo $PWD|sed -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g')
+			echo "$PWD" | sed -n -e 's-.*/\.\{0,1\}.\([^/]*\)-\1-p'
+			;;
+	esac
 }
 
 prompt_func()
-{   
-    local ret="$(echo $?)"
-    local red="\[\033[38;5;196m\]"
-    local magenta="\[\033[38;5;201m\]"
-    local green="\[\033[38;5;10m\]"
-    local blue="\[\033[38;5;33m\]"
-    local yellow="\[\033[38;5;11m\]"
-    local end="\[\033[00m\]"
+{
+	local ret="$(echo $?)"
+	local red="\[\033[38;5;196m\]"
+	local magenta="\[\033[38;5;201m\]"
+	local green="\[\033[38;5;10m\]"
+	local blue="\[\033[38;5;33m\]"
+	local yellow="\[\033[38;5;11m\]"
+	local end="\[\033[00m\]"
 
-    local face=""
-    local hface="${magenta}^_^${end}"
-    local cface="${red}-_:/_-${ret}${end}"
+	local face=""
+	local hface="${magenta}^_^${end}"
+	local cface="${red}-_:/_-${ret}${end}"
 
-    face="$([[ $ret == "0" ]] && echo -en "$hface" || echo -en "$cface")"
+	face="$([[ $ret == "0" ]] && echo -en "$hface" || echo -en "$cface")"
 
-    local promptface="\n${blue}└[$face${blue}]${end}"
-    local start="${blue}┌[${green}\\u@\h${blue}]-[${magenta}\\w${blue}]${promptface}" 
-    local gitstr="${blue}-[%s${blue}]${end}"
-    
-    local end="${blue}>${end}"
+	local promptface="\n${blue}└[$face${blue}]${end}"
 
-    __git_ps1 $start $end $gitstr
+    local start="${blue}┌[${green}\\u@\h${blue}]-[${magenta}$(prompt_pwd)${blue}]${promptface}"
+
+	local gitstr="${blue}-[%s${blue}]${end}"
+
+	local end="${blue}>${end}"
+
+	__git_ps1 $start $end $gitstr
 }
 
 #PROMPT_COMMAND='__git_ps1 "┌[\[\033[01;32m\]\\u@\h" " \[\033[01;34m\]\W \n└[]>\\\$ \[\033[00m\]" '
