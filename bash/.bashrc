@@ -2,6 +2,10 @@
 # Source global definitions
 if [ -f ~/.bashrc.sh ]; then
 	. ~/.bashrc.sh
+	PROMPT_COMMAND=prompt_func
+	PROMPT_COMMAND="$PROMPT_COMMAND; history -a"
+else
+	PROMPT_COMMAND="history -a, $PROMPT_COMMAND"
 fi
 
 if [ -f /etc/profile.d/nix.sh ]; then
@@ -40,6 +44,8 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=~/.bash_eternal_history
 
 
+#PROMPT_COMMAND=prompt_func
+#PROMPT_COMMAND="$PROMPT_COMMAND; history -a"
 
-PROMPT_COMMAND="$PROMPT_COMMAND; history -a"
+#PROMPT_COMMAND="history -a, $PROMPT_COMMAND"
 

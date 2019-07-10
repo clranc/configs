@@ -122,32 +122,30 @@ color_str()
 
 prompt_func()
 {   
-    local ret=$?
-    local red="\033[38;5;196m"
-    local green="\033[38;5;10m"
-    local blue="\033[38;5;20m" 
-    local end="\033[m"
+    local ret="$(echo $?)"
+    local red="\[\033[38;5;196m\]"
+    local magenta="\[\033[38;5;201m\]"
+    local green="\[\033[38;5;10m\]"
+    local blue="\[\033[38;5;33m\]"
+    local yellow="\[\033[38;5;11m\]"
+    local end="\[\033[00m\]"
+
     local face=""
-    local hface="${green}^_^${end}"
-    local cface="${red}-_:/_-${end}"
+    local hface="${magenta}^_^${end}"
+    local cface="${red}-_:/_-${ret}${end}"
 
-    face="$([[ $ret -eq 0 ]] && echo -en "$hface" || echo -en "$cface")"
+    face="$([[ $ret == "0" ]] && echo -en "$hface" || echo -en "$cface")"
 
-    local startstr="${blue}┌[${green}\\u@\h${blue}]${end}" 
+    local promptface="\n${blue}└[$face${blue}]${end}"
+    local start="${blue}┌[${green}\\u@\h${blue}]-[${magenta}\\w${blue}]${promptface}" 
     local gitstr="${blue}-[%s${blue}]${end}"
     
-    local prompt="\n${blue}└[$face${blue}]>${end}"
-    local endstr="${blue}-[${green}\\w${blue}]${end}${prompt}"
+    local end="${blue}>${end}"
 
-
-    __git_ps1 $startstr $endstr $gitstr
+    __git_ps1 $start $end $gitstr
 }
 
 #PROMPT_COMMAND='__git_ps1 "┌[\[\033[01;32m\]\\u@\h" " \[\033[01;34m\]\W \n└[]>\\\$ \[\033[00m\]" '
-
-PROMPT_COMMAND=prompt_func
-
-
 
 # Try to keep environment pollution down, EPA loves us.
 unset use_color sh
