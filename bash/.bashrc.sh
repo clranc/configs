@@ -86,11 +86,19 @@ fi
 
 . ~/.git-prompt.sh
 
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWUPSTREAM="auto"
+GIT_PS1_SHOWCOLORHINTS=true
+
+
+
 if ${use_color} ; then
 	if [[ ${EUID} == 0 ]] ; then  #Check if root user
     PS1+='\[\033[01;31m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
 	else
-    PS1+='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]$(__git_ps1 " %s")\[\033[00m\]: \[\033[01;34m\]\W \$\[\033[00m\] '
+    PS1+='\[\033[01;32m\]\u@\h\[\033[00m\]:$(__git_ps1 "%s")\[\033[00m\]: \[\033[01;34m\]\W \$\[\033[00m\] '
 	fi
 
 	alias less='less -R'
@@ -106,6 +114,40 @@ fi
 for sh in /etc/bash/bashrc.d/* ; do
 	[[ -r ${sh} ]] && source "${sh}"
 done
+
+color_str()
+{
+    echo -en "\033\[38;5;${1}m\]"
+}
+
+prompt_func()
+{   
+    local ret=$?
+    local red="\033[38;5;196m"
+    local green="\033[38;5;10m"
+    local blue="\033[38;5;20m" 
+    local end="\033[m"
+    local face=""
+    local hface="${green}^_^${end}"
+    local cface="${red}-_:/_-${end}"
+
+    face="$([[ $ret -eq 0 ]] && echo -en "$hface" || echo -en "$cface")"
+
+    local startstr="${blue}┌[${green}\\u@\h${blue}]${end}" 
+    local gitstr="${blue}-[%s${blue}]${end}"
+    
+    local prompt="\n${blue}└[$face${blue}]>${end}"
+    local endstr="${blue}-[${green}\\w${blue}]${end}${prompt}"
+
+
+    __git_ps1 $startstr $endstr $gitstr
+}
+
+#PROMPT_COMMAND='__git_ps1 "┌[\[\033[01;32m\]\\u@\h" " \[\033[01;34m\]\W \n└[]>\\\$ \[\033[00m\]" '
+
+PROMPT_COMMAND=prompt_func
+
+
 
 # Try to keep environment pollution down, EPA loves us.
 unset use_color sh

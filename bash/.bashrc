@@ -10,7 +10,7 @@ fi
 
 GRADLE=/usr/local/gradle-source-build/bin
 
-#PATH=/tools/Xilinx/Vivado/2018.3/bin/:$HOME/bin:$HOME/.local/bin:/usr/local/texlive/2019/bin/x86_64-linux:/usr/bin:/usr/local/bin:$GRADLE:$PATH
+PATH=/tools/Xilinx/Vivado/2018.3/bin/:$HOME/bin:$HOME/.local/bin:/usr/local/texlive/2019/bin/x86_64-linux:/usr/bin:/usr/local/bin:$GRADLE:$PATH
 
 # Python Virtualenv path stuff
 #export WORKON_HOME=$HOME/.virtualenvs
@@ -39,5 +39,7 @@ export HISTTIMEFORMAT="[%F %T] "
 
 export HISTFILE=~/.bash_eternal_history
 
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+
+PROMPT_COMMAND="$PROMPT_COMMAND; history -a"
 
