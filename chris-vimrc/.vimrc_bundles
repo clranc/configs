@@ -27,7 +27,7 @@ Bundle 'roxma/vim-hug-neovim-rpc'
 " Java Complete
 Bundle 'artur-shaik/vim-javacomplete2'
 " Haskell
-Bundle 'Shougo/vimproc'
+Bundle 'Shougo/vimproc.vim'
 Bundle 'eagletmt/neco-ghc'
 Bundle 'eagletmt/ghcmod-vim'
 

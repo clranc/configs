@@ -5,40 +5,34 @@ set shell=/bin/bash
 
 " Exit insert mode
 inoremap kj <Esc>
-"vnoremap kj <Esc> 
-" End and head of a line
-"inoremap ;l <End>
-"inoremap ;k <Home>
-" Text Navigation
-"  h -> Up
-"  j -> Down
-"  k -> Left
-"  l -> Right
-"  ; -> Home
-"  ' -> End
-"noremap i k
-"noremap h i
-"noremap k j
-"noremap j h
-noremap , a
-noremap ; <Home>
-noremap ' <End>
+
+" Use only one key for <Home> and <End>
+"
+" Default <Home> -> 0
+" Default <End>  -> $
+"
+" Shift + 0 key => ) character
+" so remap ) to <End> to use only the 0 key 
+"
+noremap ) <End>
 
 " list
-nnoremap <F3> :set list<BAR><CR>
+nnoremap <F1> :set list<BAR><CR>
 
 " nolist
-nnoremap <F4> :set nolist<BAR><CR>
+nnoremap <F2> :set nolist<BAR><CR>
 
-" Kill Trailing WhiteSpace
+" Euthenize tabs
+nnoremap <F3> :set expandtab<Bar>:retab<Bar><CR>
+
+" Un-Euthenze tabs
+nnoremap <F4> :set noexpandtab<Bar>:retab!<Bar><CR>
+
+" Kill Traiing WhiteSpace
 nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
 
-" Euthenizes tabs
-nnoremap <F6> :set expandtab<Bar>:retab<Bar><CR>
-
-" Un-Euthenize tabs
-nnoremap <F7> :set noexpandtab<Bar>:retab!<Bar><CR>
-
+" Toggle Synstastic
+nnoremap <F6> :SyntasticToggleMode<BAR><CR>
 
 " Not compatible with Vi
 set nocompatible
@@ -76,18 +70,23 @@ let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme elflord
 syntax on
 
-" python syntax
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"
-""" Display checker-name for that error-message
-"let g:syntastic_aggregate_errors = 1
+" Syntastic Passive Mode
+"let b:syntastic_mode = "passive"
 
-"let g:syntastic_python_checkers=['flake8','python3']
+" python syntax
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+
+"" Display checker-name for that error-message
+let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_python_checkers=['python3']
+
+" let g:pymode_lint_ignore=""
 
 " Vim air-line
 let g:airline_powerline_fonts=1
@@ -95,7 +94,7 @@ let g:airline_powerline_fonts=1
 set laststatus=2
 
 " Ruler
-"set colorcolumn=80
+"set colorcolumn=81
 
 " Invisible character setting
 set list
@@ -138,13 +137,14 @@ set timeoutlen=1000 ttimeoutlen=0
 set nospell
 
 " Nerd Tree
-"autocmd vimenter * NERDTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"let g:NERDTreeIndicatorMapCustom = {
-"    \ "Modified"  : "**",
+autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "**" }
+
 "    \ "Staged"    : "+",
 "    \ "Untracked" : "*_",
 "    \ "Renamed"   : "->",
