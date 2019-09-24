@@ -5,26 +5,34 @@ set shell=/bin/bash
 
 " Exit insert mode
 inoremap kj <Esc>
-" End and head of a line
-"inoremap ;l <End>
-"inoremap ;k <Home> 
-" Text Navigation
-"  h -> Up
-"  j -> Down
-"  k -> Left
-"  l -> Right
-"  ; -> Home
-"  ' -> End
-"noremap i k
-"noremap h i
-"noremap k j
-"noremap j h
-noremap , a
-noremap ; <Home>
-noremap ' <End>
 
-" Kill Trailing WhiteSpace
+" Use only one key for <Home> and <End>
+"
+" Default <Home> -> 0
+" Default <End>  -> $
+"
+" Shift + 0 key => ) character
+" so remap ) to <End> to use only the 0 key 
+"
+noremap ) <End>
+
+" list
+nnoremap <F1> :set list<BAR><CR>
+
+" nolist
+nnoremap <F2> :set nolist<BAR><CR>
+
+" Euthenize tabs
+nnoremap <F3> :set expandtab<Bar>:retab<Bar><CR>
+
+" Un-Euthenze tabs
+nnoremap <F4> :set noexpandtab<Bar>:retab!<Bar><CR>
+
+" Kill Traiing WhiteSpace
 nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:call winrestview(_save)<Bar><CR>
+
+" Toggle Synstastic
+nnoremap <F6> :SyntasticToggleMode<BAR><CR>
 
 " Not compatible with Vi
 set nocompatible
@@ -44,9 +52,6 @@ source ~/.vimrc_vundle
 " Bundles
 source ~/.vimrc_bundles
 
-" User files (optional)
-silent! source ~/.vimrc_user
-
 " Enable mouse
 set mouse=a
 if !has('nvim')
@@ -65,13 +70,31 @@ let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme elflord
 syntax on
 
+" Syntastic Passive Mode
+"let b:syntastic_mode = "passive"
+
+" python syntax
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+
+"" Display checker-name for that error-message
+let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_python_checkers=['python3']
+
+" let g:pymode_lint_ignore=""
+
 " Vim air-line
 let g:airline_powerline_fonts=1
 " Powerline
 set laststatus=2
 
 " Ruler
-"set colorcolumn=80
+"set colorcolumn=81
 
 " Invisible character setting
 set list
@@ -114,13 +137,14 @@ set timeoutlen=1000 ttimeoutlen=0
 set nospell
 
 " Nerd Tree
-"autocmd vimenter * NERDTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"let g:NERDTreeIndicatorMapCustom = {
-"    \ "Modified"  : "**",
+autocmd vimenter * NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "**" }
+
 "    \ "Staged"    : "+",
 "    \ "Untracked" : "*_",
 "    \ "Renamed"   : "->",
@@ -148,3 +172,11 @@ au BufNewFile,BufRead *.less set filetype=less
 au BufRead,BufNewFile *.go setfiletype go
 au BufNewFile,BufRead *.ino set filetype=c
 au BufNewFile,BufRead *.pde set filetype=c
+
+
+let s:gitter = substitute(system('git rev-parse --show-toplevel'),'\n$', '', '')
+let s:source = join([s:gitter,'.vimrc_settings'],'/')
+" Work directory files (optional)
+execute 'silent! source '. s:source
+let s:cppconfig = join([s:gitter,'.syntastic_c_headers'],'/')
+silent! let g:syntastic_cpp_config_file = s:cppconfig

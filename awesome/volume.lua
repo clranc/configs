@@ -1,61 +1,66 @@
-local wibox = require("wibox")
 local awful = require("awful")
+local wibox = require("wibox")
 local naughty = require("naughty")
+local gears = require("gears")
+local colors = require("colorgradient")
 
-volume_widget = awful.widget.progressbar({ width = 16 })
-volume_widget:set_vertical(true)
-volume_widget:set_ticks(true)
-volume_widget:set_max_value(1.0)
+local base_widget = wibox.widget {
+	{
+		max_value = 100,
+		ticks = true,
+		widget = wibox.widget.progressbar,
+		border_width = 5,
+		margins = {
+			top = 6,
+			bottom = 6,
+		},
+		clip = false,
+		shape = gears.shape.rounded_bar,
+	},
+	forced_width = 16,
+	direction = "east",
+	layout = wibox.container.rotate,
+}
 
-volume_widget.update = function()
-   local status = awful.util.pread("amixer sget Master")
+local volume_update = function(widget, stdout)
+	local volume = math.min(tonumber(string.match(stdout, "(%d?%d?%d)%%")), 100)
 
-   local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
-   if volume > 1.0 then
-      volume = 1.0
-   end
+	local status = string.match(stdout, "%[(o[^%]]*)%]")
 
-   status = string.match(status, "%[(o[^%]]*)%]")
+	local interpol_color = colors.colorFrom(
+		volume,
+		0x3F, 0x3F, 0x3F,
+		0xDC, 0xDC, 0xCC)
+	local couldfind = string.find(status, "on", 1, true)
 
-   -- starting colour
-   local sr, sg, sb = 0x3F, 0x3F, 0x3F
-   -- ending colour
-   local er, eg, eb = 0xDC, 0xDC, 0xCC
-
-   local ir = math.floor(volume * (er - sr) + sr)
-   local ig = math.floor(volume * (eg - sg) + sg)
-   local ib = math.floor(volume * (eb - sb) + sb)
-   local interpol_colour = string.format("%.2x%.2x%.2x", ir, ig, ib)
-   local couldfind = string.find(status, "on", 1, true)
-   volume_widget:set_color(couldfind and interpol_colour or "FF0000")
-   volume_widget:set_value(volume)
-   volume_widget.volume = volume
+	widget.widget.color = couldfind and interpol_color or "#FF0000"
+	widget.widget:set_value(volume)
+	widget.volume = volume
 end
 
-volume_widget.up = function()
-	awful.util.pread("amixer set Master 5%+")
+local volume_widget = awful.widget.watch (
+	"amixer sget Master", 1, volume_update, base_widget
+)
+
+local volcommand = function(cmd)
+	return function()
+		awful.spawn.easy_async(cmd, function(stdout)
+			volume_update(volume_widget, stdout)
+		end)
+	end
 end
 
-volume_widget.down = function()
-	awful.util.pread("amixer set Master 5%-")
-end
+volume_widget.up = volcommand("amixer set Master 5%+")
+volume_widget.down = volcommand("amixer set Master 5%-")
+volume_widget.toggle = volcommand("amixer set Master toggle")
 
-volume_widget.toggle = function()
-	awful.util.pread("amixer set Master toggle")
-end
-
-volume_widget.update()
-
-mytimer = timer({ timeout = 1 })
-mytimer:connect_signal("timeout", volume_widget.update)
-mytimer:start()
-
-volume_widget:buttons(awful.util.table.join(
+volume_widget:buttons(gears.table.join(
 	awful.button({}, 1, function()
-		naughty.notify({text = "Volume: " .. volume_widget.volume*100 .. "%"})
+		naughty.notify({text = "Volume: " .. volume_widget.volume .. "%"})
 	end),
 	awful.button({}, 3, volume_widget.toggle),
 	awful.button({}, 4, volume_widget.up),
 	awful.button({}, 5, volume_widget.down)
 ))
 
+return volume_widget
