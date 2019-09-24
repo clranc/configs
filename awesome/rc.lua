@@ -79,6 +79,30 @@ end
 
 setModKey()
 
+modkey = "Mod4"
+
+function setModKey()
+    local file = io.popen('xinput', 'r')
+    local stdout = file:read('*all')
+    file:close()
+    local msg = "Regular keyboard\n\nModkey = Super"
+
+    if stdout == '' then
+        msg = "Missing xinput to see devices\n\nModkey = Super"
+    elseif stdout:match("CHESEN") == "CHESEN" then
+        msg = "IBM M13 detected\n\nModkey = Alt"
+        modkey = "Mod1"
+    end
+
+    naughty.notify({
+        text = msg,
+        timeout =7
+    })
+end
+
+setModKey()
+
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.fair,
@@ -225,7 +249,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+   s.mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -250,6 +274,7 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
+
 -- }}}
 
 -- {{{ Mouse bindings
@@ -365,6 +390,7 @@ globalkeys = gears.table.join(
     -- Lock
     awful.key({ modkey, "Control" }, "l", function ()
         awful.util.spawn("xscreensaver-command -lock") end),
+
     -- Volume
     awful.key({ }, "XF86AudioRaiseVolume", volume_widget.up    ),
     awful.key({ }, "XF86AudioLowerVolume", volume_widget.down  ),
@@ -636,6 +662,8 @@ end
 -- If the programs don't exist, bash will just silently fails
 run_once("xscreensaver")
 run_once("nm-applet")
+--run_once("blueman-applet")
+
 run_once_py("blueberry-tray")
 run_once("telegram-desktop")
 
