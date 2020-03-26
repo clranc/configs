@@ -16,6 +16,7 @@ remind.widget = wibox.widget {
     widget = wibox.widget.background,
 }
 
+
 function remind.catfile(name, fmt)
     local fh = io.popen("cat "..name,'r')
     local stdout = fh:read('*all')
@@ -32,12 +33,12 @@ function remind.findtodos ()
         naughty.notify({ preset = naughty.config.presets.critical,
                          text = 'Yo!! Why arent you doing stuff bra!?',
                          timeout = 10,
+
                          position = "top_middle"})
+
     end
     return todos
 end
-
--- Todo: Split it out into multiple batteries
 
 
 function remind.update()
@@ -45,7 +46,8 @@ function remind.update()
     -- Running totals
     local output
     local cnt = 0
-    -- Add each battery's values to the running total
+
+
     for todo in todos do
         output = remind.catfile("~/todo/"..todo)
         naughty.notify({ bg="#FDFF00",
@@ -70,6 +72,7 @@ remind.widget:buttons(gears.table.join(
         remind.update()
         remind.mytimer:again()
     end)
+
 ))
 
 remind.mytimer:start()
