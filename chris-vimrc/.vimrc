@@ -34,6 +34,9 @@ nnoremap <F5> :let _save = winsaveview()<Bar>:let _s=@/<Bar>:%s/\s\+$//e<Bar>:le
 " Toggle Synstastic
 nnoremap <F6> :SyntasticToggleMode<BAR><CR>
 
+" Toggle NERDTree
+nnoremap <F7> :NERDTreeToggle<BAR><CR>
+
 " Not compatible with Vi
 set nocompatible
 
@@ -55,7 +58,11 @@ source ~/.vimrc_bundles
 " Enable mouse
 set mouse=a
 if !has('nvim')
-    set ttymouse=xterm2
+    if has("mouse_sgr")
+        set ttymouse=sgr
+    else
+        set ttymouse=xterm2
+    end
 endif
 
 " Line numbers
@@ -107,7 +114,6 @@ set shiftwidth=4
 set softtabstop=4
 set smarttab
 set expandtab
-set et
 let g:indentLine_char = '|'
 let g:indentLine_color_term = 239
 
@@ -137,7 +143,7 @@ set timeoutlen=1000 ttimeoutlen=0
 set nospell
 
 " Nerd Tree
-autocmd vimenter * NERDTree
+"autocmd vimenter * NERDTree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
@@ -165,6 +171,12 @@ autocmd FileType java setlocal omnifunc=javacomplete#Complete
 " haskell
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
+" latex
+autocmd BufNewFile,BufRead *.tex IndentLinesDisable
+
+" jsons
+let g:vim_json_syntax_conceal=0
+
 " File type aliases
 au BufNewFile,BufRead *.ejs set filetype=jst
 au BufNewFile,BufRead *.less set filetype=less
@@ -180,3 +192,5 @@ let s:source = join([s:gitter,'.vimrc_settings'],'/')
 execute 'silent! source '. s:source
 let s:cppconfig = join([s:gitter,'.syntastic_c_headers'],'/')
 silent! let g:syntastic_cpp_config_file = s:cppconfig
+
+

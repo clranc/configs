@@ -14,6 +14,7 @@ fi
 
 GRADLE=/usr/local/gradle-source-build/bin
 
+PATH=/home/crank/Documents/work/cyberacademy_2019/week_10/arm-linux-androideabi-4.6/bin/:$PATH
 PATH=/tools/Xilinx/Vivado/2018.3/bin/:$HOME/bin:$HOME/.local/bin:/usr/local/texlive/2019/bin/x86_64-linux:/usr/bin:/usr/local/bin:$GRADLE:$PATH
 
 # Python Virtualenv path stuff

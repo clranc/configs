@@ -132,31 +132,39 @@ prompt_pwd() {
 	esac
 }
 
+prompt_virt_path() {
+			printf "%s" $(echo $VIRTUAL_ENV|sed -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g')
+			echo "$VIRTUAL_ENV" | sed -n -e 's-.*/\.\{0,1\}.\([^/]*\)-\1-p'
+}
+
 prompt_func()
 {
-	local ret="$(echo $?)"
-	local red="\[\033[38;5;196m\]"
-	local magenta="\[\033[38;5;201m\]"
-	local green="\[\033[38;5;10m\]"
-	local blue="\[\033[38;5;33m\]"
-	local yellow="\[\033[38;5;11m\]"
-	local end="\[\033[00m\]"
+local ret="$(echo $?)"
+local red="\[\033[38;5;196m\]"
+local magenta="\[\033[38;5;201m\]"
+local green="\[\033[38;5;10m\]"
+local blue="\[\033[38;5;33m\]"
+local yellow="\[\033[38;5;11m\]"
+local end="\[\033[00m\]"
 
-	local face=""
-	local hface="${magenta}^_^${end}"
-	local cface="${red}-_:/_-${ret}${end}"
+local face=""
+local hface="${magenta}^_^${end}"
+local cface="${red}-_:/_-${ret}${end}"
+local envstr="-${yellow}(virt-$(prompt_virt_path))${end}"
+local virtenv=""
 
-	face="$([[ $ret == "0" ]] && echo -en "$hface" || echo -en "$cface")"
+face="$([[ $ret == "0" ]] && echo -en "$hface" || echo -en "$cface")"
+virtenv="$([[ ! -z "$VIRTUAL_ENV" ]] && echo -en "$envstr" || echo -en "")"
 
-	local promptface="\n${blue}└[$face${blue}]${end}"
+local promptface="\n${blue}└[$face${blue}]${end}"
 
-    local start="${blue}┌[${green}\\u@\h${blue}]-[${magenta}$(prompt_pwd)${blue}]${promptface}"
+local start="${blue}┌[${green}\\u@\h${blue}]-[${magenta}$(prompt_pwd)${blue}]$virtenv${promptface}"
 
-	local gitstr="${blue}-[%s${blue}]${end}"
+local gitstr="${blue}-[%s${blue}]${end}"
 
-	local end="${blue}>${end}"
+local end="${blue}>${end}"
 
-	__git_ps1 $start $end $gitstr
+__git_ps1 $start $end $gitstr
 }
 
 #PROMPT_COMMAND='__git_ps1 "┌[\[\033[01;32m\]\\u@\h" " \[\033[01;34m\]\W \n└[]>\\\$ \[\033[00m\]" '
