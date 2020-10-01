@@ -271,13 +271,13 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 ------------------ Modified  j and k related commands to reverse their transitions
-    awful.key({ modkey,           }, "k",
+    awful.key({ modkey, "Control" }, "k",
         function ()
             awful.client.focus.byidx(1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "j",
+    awful.key({ modkey, "Control" }, "j",
         function ()
             awful.client.focus.byidx(-1)
         end,
@@ -292,9 +292,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(-1)    end,
               {description = "swap with previous client by index", group = "client"}),
 ------- Screen transition commands
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(1) end,
+    awful.key({ modkey,           }, "k", function () awful.screen.focus_relative(1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey,           }, "j", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
 ------------------
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
