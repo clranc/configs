@@ -79,30 +79,6 @@ end
 
 setModKey()
 
-modkey = "Mod4"
-
-function setModKey()
-    local file = io.popen('xinput', 'r')
-    local stdout = file:read('*all')
-    file:close()
-    local msg = "Regular keyboard\n\nModkey = Super"
-
-    if stdout == '' then
-        msg = "Missing xinput to see devices\n\nModkey = Super"
-    elseif stdout:match("CHESEN") == "CHESEN" then
-        msg = "IBM M13 detected\n\nModkey = Alt"
-        modkey = "Mod1"
-    end
-
-    naughty.notify({
-        text = msg,
-        timeout =7
-    })
-end
-
-setModKey()
-
-
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.fair,
@@ -249,7 +225,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-   s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -274,7 +250,6 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
-
 -- }}}
 
 -- {{{ Mouse bindings
@@ -295,14 +270,14 @@ globalkeys = gears.table.join(
               {description = "view next", group = "tag"}),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
-
-    awful.key({ modkey,           }, "j",
+------------------ Modified  j and k related commands to reverse their transitions
+    awful.key({ modkey,           }, "k",
         function ()
-            awful.client.focus.byidx( 1)
+            awful.client.focus.byidx(1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "k",
+    awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx(-1)
         end,
@@ -312,14 +287,16 @@ globalkeys = gears.table.join(
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
+    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( 1)    end,
               {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
+    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(-1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+------- Screen transition commands
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
+------------------
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
     awful.key({ modkey,           }, "Tab",
@@ -388,9 +365,8 @@ globalkeys = gears.table.join(
     -- Dmenu
     awful.key({ modkey }, "p", function() awful.util.spawn("dmenu_run") end),
     -- Lock
-    awful.key({ modkey, "Control" }, "l", function ()
+    awful.key({ modkey, "Control" , "Shift"}, "l", function ()
         awful.util.spawn("xscreensaver-command -lock") end),
-
     -- Volume
     awful.key({ }, "XF86AudioRaiseVolume", volume_widget.up    ),
     awful.key({ }, "XF86AudioLowerVolume", volume_widget.down  ),
@@ -417,7 +393,9 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
-              {description = "move to screen", group = "client"}),
+              {description = "move client to next screen", group = "client-screen"}),
+    awful.key({ modkey,           }, "i",      function (c) c:move_to_screen((c.screen.index-1))               end,
+              {description = "move client to previous screen", group = "client-screen"}),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey,           }, "n",
@@ -662,24 +640,25 @@ end
 -- If the programs don't exist, bash will just silently fails
 run_once("xscreensaver")
 run_once("nm-applet")
---run_once("blueman-applet")
+----run_once_py("blueberry-tray")
+----run_once("signal-desktop")
+----run_once("telegram-desktop")
 
-run_once_py("blueberry-tray")
-run_once("telegram-desktop")
 
-
---awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Scroll Method Enabled' 0 0 1")
---awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Middle Emulation Enabled' 1")
+----awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Scroll Method Enabled' 0 0 1")
+----awful.util.spawn_with_shell("xinput --set-prop 13 'libinput Middle Emulation Enabled' 1")
 
 
 -- External Keyboard
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Middle Emulation Enabled' 1")
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'Coordinate Transformation Matrix' 3 0 0 0 3 0 0 0 1")
+----awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Scroll Method Enabled' 0 0 1")
+----awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'libinput Middle Emulation Enabled' 1")
+----awful.util.spawn_with_shell("xinput --set-prop 'pointer:Unicomp Inc Unicomp 10x Kbrd R7_2_w_PS_R7_37' 'Coordinate Transformation Matrix' 3 0 0 0 3 0 0 0 1")
 
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Scroll Method Enabled' 0 0 1")
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Middle Emulation Enabled' 1")
---awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'Coordinate Transformation Matrix' 2 0 0 0 2 0 0 0 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Scroll Method Enabled' 0 0 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'libinput Middle Emulation Enabled' 1")
+awful.util.spawn_with_shell("xinput --set-prop 'pointer:CHESEN PS2 to USB Converter Mouse' 'Coordinate Transformation Matrix' 2 0 0 0 2 0 0 0 1")
+awful.util.spawn_with_shell("xinput set-button-map $(xinput --list --id-only 'pointer:CHESEN PS2 to USB Converter Mouse') 1 0 3")
+
 
 -- Dell XPS display
 awful.util.spawn_with_shell("xrandr --output eDP-1 --mode 1920x1080")

@@ -58,6 +58,7 @@ source ~/.vimrc_bundles
 " Enable mouse
 set mouse=a
 if !has('nvim')
+    " mouse click fix past 220th column
     if has("mouse_sgr")
         set ttymouse=sgr
     else
@@ -190,7 +191,9 @@ let s:gitter = substitute(system('git rev-parse --show-toplevel'),'\n$', '', '')
 let s:source = join([s:gitter,'.vimrc_settings'],'/')
 " Work directory files (optional)
 execute 'silent! source '. s:source
-let s:cppconfig = join([s:gitter,'.syntastic_c_headers'],'/')
+let s:cconfig = join([s:gitter,'.syntastic_c_headers'],'/')
+let s:cppconfig = join([s:gitter,'.syntastic_cpp_headers'],'/')
 silent! let g:syntastic_cpp_config_file = s:cppconfig
-
+silent! let g:syntastic_c_compiler_options=''
+silent! let g:syntastic_c_config_file = s:cconfig
 
